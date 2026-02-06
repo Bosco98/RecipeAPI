@@ -6,7 +6,6 @@
         "maxTokens": 2000
     },
     "translate": {
-        "projectId": "project-5040caf2-23b4-413e-a9b",
         "targetLanguage": "mr"
     },
     "image": {

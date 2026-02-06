@@ -29,7 +29,7 @@ export class TranslateService {
                 if (config.translate) {
                     this.targetLanguage = config.translate.targetLanguage || 'es';
                     this.translate = new v2.Translate({
-                        projectId: config.translate.projectId
+                        projectId: process.env.GOOGLE_CLOUD_PROJECT_ID
                     });
                 }
             } else {
