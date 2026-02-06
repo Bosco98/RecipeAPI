@@ -7,8 +7,7 @@ RUN npm install
 
 COPY . .
 
-# build your project (creates dist/)
-RUN npm run build
+
 
 ENV PORT=8080
 EXPOSE 8080
