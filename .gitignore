@@ -3,3 +3,4 @@
 .convex/
 /convex/_generated
 node_modules
+.DS_Store
