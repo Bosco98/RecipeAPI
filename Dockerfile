@@ -8,6 +8,8 @@ RUN npm install --production
 COPY . .
 RUN npm run build
 
+RUN ls
+
 ENV PORT=8080
 EXPOSE 8080
 
