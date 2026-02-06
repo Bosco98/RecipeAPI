@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Read config
-const configPath = path.join(__dirname, '../config.json');
+const configPath = path.join(__dirname, '../../src/assets/config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
 export class LLMService {
@@ -42,7 +42,7 @@ export class LLMService {
         const dietary_types = foodtypes['dietary_type'];
         const cooking_methods = foodtypes['cooking_method'];
         const special_tags = foodtypes['special_tags'];
-        const promptPath = path.resolve(__dirname, '../../src/data/Prompts/recipe.yaml');
+        const promptPath = path.resolve(__dirname, '../../src/assets/Prompts/recipe.yaml');
         const promptData = YAML.parse(fs.readFileSync(promptPath, 'utf8'));
 
         let prompt = promptData.Prompt;

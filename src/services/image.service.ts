@@ -15,7 +15,7 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const imagePromptPath = path.resolve(__dirname, "../../src/data/Prompts/image.yaml");
+const imagePromptPath = path.resolve(__dirname, "../../src/assets/Prompts/image.yaml");
 const imagePrompt = YAML.parse(fs.readFileSync(imagePromptPath, "utf8"));
 
 export class ImageService {
@@ -25,7 +25,7 @@ export class ImageService {
     private config: any;
 
     constructor() {
-        const configPath = path.resolve(__dirname, '../../src/config.json');
+        const configPath = path.resolve(__dirname, '../../src/assets/config.json');
         this.config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
         const projectId = process.env.GOOGLE_CLOUD_PROJECT_ID;

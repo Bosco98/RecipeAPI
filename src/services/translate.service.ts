@@ -21,7 +21,7 @@ export class TranslateService {
 
     constructor() {
         try {
-            const configPath = path.resolve(__dirname, '../../src/config.json');
+            const configPath = path.resolve(__dirname, '../../src/assets/config.json');
             if (fs.existsSync(configPath)) {
                 const configRaw = fs.readFileSync(configPath, 'utf-8');
                 const config: Config = JSON.parse(configRaw);
