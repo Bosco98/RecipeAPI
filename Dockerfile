@@ -2,17 +2,15 @@ FROM node:20-slim
 
 WORKDIR /app
 
-# install deps
 COPY package*.json ./
-RUN npm install --production
+RUN npm install
 
-# copy source
 COPY . .
 
-RUN npm run build   
+# build your project (creates dist/)
+RUN npm run build
 
 ENV PORT=8080
 EXPOSE 8080
 
 CMD ["npm","start"]
-
