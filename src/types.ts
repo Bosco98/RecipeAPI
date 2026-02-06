@@ -8,10 +8,11 @@ export interface Ingredient {
 export interface Instruction {
     stepNumber: number;
     instruction?: string;
+    instruction_Local?: string;
 }
 
 export interface HealthifySection {
-    ingredients: string[];
+    ingredients: Ingredient[];
     instructions: string[];
     caloriesPerPortion?: number;
     macros?: any;

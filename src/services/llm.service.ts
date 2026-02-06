@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import foodtypes from '../data/Foodtypes.js';
 
+import YAML from "yaml";
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -39,57 +41,15 @@ export class LLMService {
         const dietary_types = foodtypes['dietary_type'];
         const cooking_methods = foodtypes['cooking_method'];
         const special_tags = foodtypes['special_tags'];
-        const prompt = `
-        You are an expert health-nutritionist chef. Your task is to extract recipe information from the provided text and format it into a structured JSON object.
-        
-        The source text comes from: ${url}
+        const promptPath = path.resolve(__dirname, '../../src/data/Prompts/recipe.yaml');
+        const promptData = YAML.parse(fs.readFileSync(promptPath, 'utf8'));
 
-        You must extract:
-        1. Name of the dish.
-        2. Description (brief).
-        3. Total time (approximate).
-        4. Servings (number).
-        5. Calories per portion (estimate if not explicitly stated).
-        6. Ingredients: List them clearly. Ideally adaptable for scaling (store amount/unit separately if possible).
-        7. Instructions: Step-by-step preparation guide.
-        
-        CRITICALLY, you must also generate a "healthify" section with two specific variations:
-        - "cut": Suggestions to reduce calories/make it lighter (e.g. substitutions, cooking methods).
-        - "bulk": Suggestions to add healthy volume/calories (e.g. adding protein, veggies).
-        For each variation, provide:
-        - A list of modified ingredients (just the changes/additions).
-        - A list of modified instructions (just the changes).
-        - Estimated calories per portion for this version.
-        - "notes": A brief explanation of the changes.
-        - Course Type: The type of dish (use only from this list: ${course_types.join(', ')}).
-        - Dietary Type: The type of diet the dish is suitable for (use only from this list: ${dietary_types.join(', ')}).
-        - Cooking Method: The method used to prepare the dish (use only from this list: ${cooking_methods.join(', ')}).
-        - Special Tags: Any additional tags that describe the dish (use only from this list: ${special_tags.join(', ')}).
-
-        Also, generate an "imagePrompt": A brief, consistent prompt describing the final dish for image generation (No need to give style or background ONLY THE MAIN DISH SUBJECT [THIS IS IMPORTANT]).
-
-        If data is missing (e.g. cooking time, calories), make reasonable expert assumptions based on standard cooking practices.
-
-        Return ONLY valid JSON matching this structure:
-        {
-          "name": "string",
-          "description": "string",
-          "totalTime": "string",
-          "servings": number,
-          "caloriesPerPortion": number,
-          "ingredients": [ { "item": "string", "amount": "string", "unit": "string", "notes": "string" } ],
-          "instructions": [ { "stepNumber": number, "instruction": "string" } ],
-          "healthify": {
-            "cut": { "ingredients": ["string"], "instructions": ["string"], "caloriesPerPortion": number, "notes": "string" },
-            "bulk": { "ingredients": ["string"], "instructions": ["string"], "caloriesPerPortion": number, "notes": "string" }
-          },
-          "imagePrompt": "string",
-          "course_type":"string",
-          "dietary_type": "string",
-          "cooking_method": "string",
-          "special_tags": "string"    
-        }
-        `;
+        let prompt = promptData.Prompt;
+        prompt = prompt.replace("<url>", url)
+            .replace("<course_type_list>", course_types.join(', '))
+            .replace("<dietary_type_list>", dietary_types.join(', '))
+            .replace("<cooking_method_list>", cooking_methods.join(', '))
+            .replace("<special_tags_list>", special_tags.join(', '));
 
         try {
             const completion = await this.openai.chat.completions.create({

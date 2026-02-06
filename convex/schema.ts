@@ -25,14 +25,28 @@ export default defineSchema({
         ),
         healthify: v.object({
             cut: v.object({
-                ingredients: v.array(v.string()),
+                ingredients: v.array(
+                    v.object({
+                        item: v.string(),
+                        amount: v.optional(v.string()),
+                        unit: v.optional(v.string()),
+                        notes: v.optional(v.string()),
+                    })
+                ),
                 instructions: v.array(v.string()),
                 caloriesPerPortion: v.optional(v.number()),
                 macros: v.optional(v.any()),
                 notes: v.string(),
             }),
             bulk: v.object({
-                ingredients: v.array(v.string()),
+                ingredients: v.array(
+                    v.object({
+                        item: v.string(),
+                        amount: v.optional(v.string()),
+                        unit: v.optional(v.string()),
+                        notes: v.optional(v.string()),
+                    })
+                ),
                 instructions: v.array(v.string()),
                 caloriesPerPortion: v.optional(v.number()),
                 macros: v.optional(v.any()),
@@ -49,14 +63,28 @@ export default defineSchema({
         )),
         healthify_Local: v.optional(v.object({
             cut: v.object({
-                ingredients: v.array(v.string()),
+                ingredients: v.array(
+                    v.object({
+                        item: v.string(),
+                        amount: v.optional(v.string()),
+                        unit: v.optional(v.string()),
+                        notes: v.optional(v.string()),
+                    })
+                ),
                 instructions: v.array(v.string()),
                 caloriesPerPortion: v.optional(v.number()),
                 macros: v.optional(v.any()), // keeping flexible
                 notes: v.string(),
             }),
             bulk: v.object({
-                ingredients: v.array(v.string()),
+                ingredients: v.array(
+                    v.object({
+                        item: v.string(),
+                        amount: v.optional(v.string()),
+                        unit: v.optional(v.string()),
+                        notes: v.optional(v.string()),
+                    })
+                ),
                 instructions: v.array(v.string()),
                 caloriesPerPortion: v.optional(v.number()),
                 macros: v.optional(v.any()),

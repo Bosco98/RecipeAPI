@@ -10,7 +10,10 @@
         "targetLanguage": "mr"
     },
     "image": {
-        "model": "imagen-4.0-fast-generate-001",
-        "aspectRatio": "1:1"
+        "model": "imagen-4.0-generate-001",
+        "aspectRatio": "1:1",
+        "width": 512,
+        "height": 512,
+        "sampleCount": 1
     }
 }

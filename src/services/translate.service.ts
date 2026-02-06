@@ -81,12 +81,9 @@ export class TranslateService {
             if (recipe.instructions && recipe.instructions.length > 0) {
                 // instructions_Local expects Instruction[] but we map 'instruction' to 'instruction_Local'
                 translated.instructions_Local = await Promise.all(recipe.instructions.map(async (inst) => {
-                    // Create new object, preserve stepNumber
                     const localInst: Instruction = {
                         stepNumber: inst.stepNumber,
-                        // We do NOT copy 'instruction' to 'instruction' (local object shouldn't have english text?)
-                        // User said: instructions[].instruction → instructions_Local[].instruction_Local
-                        // So we map the value.
+                        instruction_Local: ""
                     };
 
                     if (inst.instruction) {
@@ -120,9 +117,16 @@ export class TranslateService {
 
         // Translate ingredients array
         if (section.ingredients && section.ingredients.length > 0) {
-            localSection.ingredients = await Promise.all(
-                section.ingredients.map(text => this.translateText(text))
-            );
+            localSection.ingredients = await Promise.all(section.ingredients.map(async (ing) => {
+                const localIng: Ingredient = { ...ing };
+                if (ing.item) {
+                    localIng.item = await this.translateText(ing.item);
+                }
+                if (ing.notes) {
+                    localIng.notes = await this.translateText(ing.notes);
+                }
+                return localIng;
+            }));
         }
 
         // Translate instructions array

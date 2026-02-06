@@ -8,6 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import YAML from "yaml";
+import sharp from 'sharp';
 import { Recipe } from '../types.js';
 
 dotenv.config();
@@ -44,7 +45,7 @@ export class ImageService {
     private getColor(): string {
         try {
             const typeKey = process.env.TYPE_KEY;
-            const colorsPath = path.resolve(__dirname, `../../src/data/${typeKey}/colors.ts`);
+            const colorsPath = path.resolve(__dirname, `../../src/data/ConfigBased/${typeKey}/colors.ts`);
 
             if (fs.existsSync(colorsPath)) {
                 const content = fs.readFileSync(colorsPath, 'utf8');
@@ -72,7 +73,7 @@ export class ImageService {
 
 
 
-        console.log(`[ImageService] Generating image with prompt: ${enhancedPrompt}`);
+        console.log(`[ImageService] Generating image with prompt`);
 
         const endpoint = `https://${location}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${location}/publishers/google/models/${modelName}:predict`;
 
@@ -92,6 +93,8 @@ export class ImageService {
                     parameters: {
                         sampleCount: this.config.image.sampleCount || 1,
                         aspectRatio: this.config.image.aspectRatio || "1:1",
+                        width: this.config.image.width || 512,
+                        height: this.config.image.height || 512
                     },
                 },
                 {
@@ -116,6 +119,24 @@ export class ImageService {
         }
     }
 
+    async compressImage(imageBuffer: Buffer): Promise<Buffer> {
+        try {
+            console.log(`[ImageService] Original image size: ${(imageBuffer.length / 1024).toFixed(2)}KB`);
+
+            // sharp(buffer) -> jpeg with 80% quality
+            // mozjpeg: true usually gives better compression for web
+            const compressedBuffer = await sharp(imageBuffer)
+                .jpeg({ quality: 80, mozjpeg: true })
+                .toBuffer();
+
+            console.log(`[ImageService] Compressed image size: ${(compressedBuffer.length / 1024).toFixed(2)}KB`);
+            return compressedBuffer;
+        } catch (error) {
+            console.error("[ImageService] Compression failed, using original:", error);
+            return imageBuffer;
+        }
+    }
+
     async uploadImage(imageBuffer: Buffer, fileName: string): Promise<string> {
         const bucketName = process.env.GOOGLE_CLOUD_STORAGE_BUCKET;
 
@@ -129,8 +150,7 @@ export class ImageService {
         console.log(`[ImageService] Uploading image to ${bucketName}/${fileName}`);
 
         await file.save(imageBuffer, {
-            metadata: { contentType: 'image/png' },
-            public: true,
+            metadata: { contentType: 'image/jpeg' }, // Changed to jpeg
         });
 
         // Permanent URL for GCS public objects
@@ -139,9 +159,11 @@ export class ImageService {
 
     async processImage(recipeId: string, data: Recipe): Promise<string> {
         try {
-            const imageBuffer = await this.generateImage(data);
-            const fileName = `recipe_${recipeId}_${Date.now()}.png`;
-            const imageUrl = await this.uploadImage(imageBuffer, fileName);
+            const rawBuffer = await this.generateImage(data);
+            const compressedBuffer = await this.compressImage(rawBuffer);
+
+            const fileName = `recipe_${recipeId}_${Date.now()}.jpg`; // Changed extension to jpg
+            const imageUrl = await this.uploadImage(compressedBuffer, fileName);
             return imageUrl;
         } catch (error) {
             console.error("[ImageService] Error in processImage:", error);
