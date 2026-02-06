@@ -1,12 +1,8 @@
 export interface Ingredient {
     item: string;
-    item_Local?: string;
     amount?: string;
-    amount_Local?: string;
     unit?: string;
-    unit_Local?: string;
     notes?: string;
-    notes_Local?: string;
 }
 
 export interface Instruction {
@@ -17,13 +13,10 @@ export interface Instruction {
 
 export interface HealthifySection {
     ingredients: string[];
-    ingredients_Local?: string[];
     instructions: string[];
-    instructions_Local?: string[];
     caloriesPerPortion?: number;
     macros?: any;
     notes: string;
-    notes_Local?: string;
 }
 
 export interface Healthify {
@@ -35,14 +28,20 @@ export interface Recipe {
     name: string;
     name_Local?: string;
     description?: string;
-    ingredients_Local?: string[];
-    instructions_Local?: string[];
+    description_local?: string;
+    ingredients: Ingredient[];
+    ingredients_Local?: Ingredient[];
+    instructions: Instruction[];
+    instructions_Local?: Instruction[];
+    healthify: Healthify;
+    healthify_Local?: Healthify;
     totalTime: string;
     servings?: number;
     caloriesPerPortion?: number;
-    ingredients: Ingredient[];
-    instructions: Instruction[];
-    healthify: Healthify;
     imagePrompt: string;
+    course_type?: string;
+    dietary_type?: string;
+    cooking_method?: string;
+    special_tags?: string;
     imageUrl?: string;
 }

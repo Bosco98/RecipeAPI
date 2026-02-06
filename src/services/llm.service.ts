@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import foodtypes from '../data/Foodtypes.js';
 
 dotenv.config();
 
@@ -34,6 +35,10 @@ export class LLMService {
     }
 
     async extractRecipe(content: string, url: string): Promise<Recipe> {
+        const course_types = foodtypes['course_type'];
+        const dietary_types = foodtypes['dietary_type'];
+        const cooking_methods = foodtypes['cooking_method'];
+        const special_tags = foodtypes['special_tags'];
         const prompt = `
         You are an expert health-nutritionist chef. Your task is to extract recipe information from the provided text and format it into a structured JSON object.
         
@@ -56,6 +61,10 @@ export class LLMService {
         - A list of modified instructions (just the changes).
         - Estimated calories per portion for this version.
         - "notes": A brief explanation of the changes.
+        - Course Type: The type of dish (use only from this list: ${course_types.join(', ')}).
+        - Dietary Type: The type of diet the dish is suitable for (use only from this list: ${dietary_types.join(', ')}).
+        - Cooking Method: The method used to prepare the dish (use only from this list: ${cooking_methods.join(', ')}).
+        - Special Tags: Any additional tags that describe the dish (use only from this list: ${special_tags.join(', ')}).
 
         Also, generate an "imagePrompt": A brief, consistent prompt describing the final dish for image generation (no text in image, photorealistic food photography style).
 
@@ -74,7 +83,11 @@ export class LLMService {
             "cut": { "ingredients": ["string"], "instructions": ["string"], "caloriesPerPortion": number, "notes": "string" },
             "bulk": { "ingredients": ["string"], "instructions": ["string"], "caloriesPerPortion": number, "notes": "string" }
           },
-          "imagePrompt": "string"
+          "imagePrompt": "string",
+          "course_type":"string",
+          "dietary_type": "string",
+          "cooking_method": "string",
+          "special_tags": "string"    
         }
         `;
 
