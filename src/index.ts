@@ -10,6 +10,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+console.log("APP STARTING...");
+console.log("PORT:", process.env.PORT);
+console.log("ENV:", process.env.BASE_URL);
+
 app.use(cors());
 app.use(express.json());
 
