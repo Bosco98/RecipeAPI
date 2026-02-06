@@ -7,7 +7,7 @@ RUN npm install
 
 COPY . .
 
-
+RUN npx convex codegen
 
 ENV PORT=8080
 EXPOSE 8080
