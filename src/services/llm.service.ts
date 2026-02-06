@@ -30,7 +30,7 @@ export class LLMService {
             baseURL: "https://openrouter.ai/api/v1",
             apiKey: apiKey,
             defaultHeaders: {
-                "HTTP-Referer": process.env.BASE_URL || "http://localhost:3000", // Required by OpenRouter
+                "HTTP-Referer": process.env.BASE_URL || "http://localhost:8080", // Required by OpenRouter
                 "X-Title": "Health Recipe Extractor", // Required by OpenRouter
             }
         });
