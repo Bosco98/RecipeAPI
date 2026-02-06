@@ -1,0 +1,8 @@
+{
+    "llm": {
+        "provider": "openrouter",
+        "model": "openai/gpt-4o-mini",
+        "temperature": 0.2,
+        "maxTokens": 2000
+    }
+}
