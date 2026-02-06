@@ -5,6 +5,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --production
 
+RUN npm run build
+
 COPY . .
 
 ENV PORT=8080
