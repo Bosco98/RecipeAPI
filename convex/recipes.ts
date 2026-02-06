@@ -10,7 +10,6 @@ export const saveRecipe = mutation({
         ingredients_Local: v.optional(v.array(v.string())),
         instructions_Local: v.optional(v.array(v.string())),
         totalTime: v.string(),
-        totalTime_Local: v.optional(v.string()),
         servings: v.optional(v.number()),
         caloriesPerPortion: v.optional(v.number()),
         ingredients: v.array(

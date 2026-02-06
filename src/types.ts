@@ -38,7 +38,6 @@ export interface Recipe {
     ingredients_Local?: string[];
     instructions_Local?: string[];
     totalTime: string;
-    totalTime_Local?: string;
     servings?: number;
     caloriesPerPortion?: number;
     ingredients: Ingredient[];
