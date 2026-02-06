@@ -66,7 +66,7 @@ export class LLMService {
         - Cooking Method: The method used to prepare the dish (use only from this list: ${cooking_methods.join(', ')}).
         - Special Tags: Any additional tags that describe the dish (use only from this list: ${special_tags.join(', ')}).
 
-        Also, generate an "imagePrompt": A brief, consistent prompt describing the final dish for image generation (no text in image, photorealistic food photography style).
+        Also, generate an "imagePrompt": A brief, consistent prompt describing the final dish for image generation (No need to give style or background ONLY THE MAIN DISH SUBJECT [THIS IS IMPORTANT]).
 
         If data is missing (e.g. cooking time, calories), make reasonable expert assumptions based on standard cooking practices.
 

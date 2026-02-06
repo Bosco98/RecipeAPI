@@ -7,8 +7,7 @@ export interface Ingredient {
 
 export interface Instruction {
     stepNumber: number;
-    instruction: string;
-    instruction_Local?: string;
+    instruction?: string;
 }
 
 export interface HealthifySection {

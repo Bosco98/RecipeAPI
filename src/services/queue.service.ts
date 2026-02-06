@@ -1,9 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ScraperService } from './scraper.service.js';
 import { LLMService } from './llm.service.js';
+import { TranslateService } from './translate.service.js';
+import { ImageService } from './image.service.js';
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../convex/_generated/api.js";
 import dotenv from 'dotenv';
+import { Recipe } from '../types.js';
 
 dotenv.config();
 
@@ -24,11 +27,15 @@ export class QueueService {
     private isProcessing: boolean = false;
     private scraperService: ScraperService;
     private llmService: LLMService;
+    private translateService: TranslateService;
+    private imageService: ImageService;
     private convex: ConvexHttpClient | null = null;
 
     constructor() {
         this.scraperService = new ScraperService();
         this.llmService = new LLMService();
+        this.translateService = new TranslateService();
+        this.imageService = new ImageService();
 
         const convexUrl = process.env.CONVEX_URL;
         if (convexUrl) {
@@ -116,18 +123,41 @@ export class QueueService {
                 const recipeData = await this.llmService.extractRecipe(textToProcess, sourceUrl);
                 console.log(`[Job ${job.id}] Extracted via LLM.`);
 
-                // 3. Save to Convex
+                // 3. Translate
+                let consolidatedData = { ...recipeData };
+                try {
+                    const translatedData = await this.translateService.translateRecipe(recipeData);
+                    consolidatedData = { ...recipeData, ...translatedData };
+                    console.log(`[Job ${job.id}] Translated.`);
+                } catch (err) {
+                    console.error(`[Job ${job.id}] Translation failed, proceeding with original data:`, err);
+                }
+
+                // 4. Generate Image (if prompt exists)
+                if (consolidatedData.imagePrompt) {
+                    try {
+                        console.log(`[Job ${job.id}] Generating image...`);
+                        // Use job.id for the image filename since we don't have a DB ID yet
+                        const imageUrl = await this.imageService.processImage(job.id, consolidatedData as Recipe);
+                        console.log(`[Job ${job.id}] Image generated: ${imageUrl}`);
+                        consolidatedData.imageUrl = imageUrl;
+                    } catch (imgErr) {
+                        console.error(`[Job ${job.id}] Image generation failed:`, imgErr);
+                    }
+                }
+
+                // 5. Save to Convex (Final Step)
                 let savedId = null;
                 if (this.convex) {
                     savedId = await this.convex.mutation(api.recipes.saveRecipe, {
-                        ...recipeData,
+                        ...consolidatedData,
                         url: sourceUrl,
                         typeKey: process.env.TYPE_KEY
                     });
                     console.log(`[Job ${job.id}] Saved to Convex: ${savedId}`);
                 }
 
-                job.result = { ...recipeData, _convexId: savedId };
+                job.result = { ...consolidatedData, _convexId: savedId };
                 job.status = 'completed';
                 job.completedAt = new Date();
                 console.log(`[Queue] Finished Job ${job.id}`);

@@ -44,7 +44,7 @@ export default defineSchema({
         instructions_Local: v.optional(v.array(
             v.object({
                 stepNumber: v.number(),
-                instruction: v.string(),
+                instruction_Local: v.string(),
             })
         )),
         healthify_Local: v.optional(v.object({

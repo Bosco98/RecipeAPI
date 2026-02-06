@@ -4,5 +4,13 @@
         "model": "openai/gpt-4o-mini",
         "temperature": 0.2,
         "maxTokens": 2000
+    },
+    "translate": {
+        "projectId": "project-5040caf2-23b4-413e-a9b",
+        "targetLanguage": "mr"
+    },
+    "image": {
+        "model": "imagen-4.0-fast-generate-001",
+        "aspectRatio": "1:1"
     }
 }

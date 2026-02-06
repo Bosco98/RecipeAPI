@@ -1,4 +1,5 @@
 const colors = {
+    "Background_color": "soft muted green background",
     "Primary": "#0b6257ff",
     "Secondary": "#129080",
     "Tertiary": "#A7E8BD",

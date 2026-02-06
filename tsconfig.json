@@ -12,7 +12,8 @@
     },
     "include": [
         "src/**/*",
-        "convex/**/*"
+        "convex/**/*",
+        "temp.js"
     ],
     "exclude": [
         "node_modules"
