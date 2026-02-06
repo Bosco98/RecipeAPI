@@ -14,6 +14,7 @@ Prompt: |
 
   8. Extract the following GLOBAL classification tags for the dish:
   - Course Type: The type of dish (use only from this list: <course_type_list>).
+  - Cuisine Type: The cuisine origin of the dish (use only from this list: <cuisine_type_list>).
   - Dietary Type: The type of diet the dish is suitable for (use only from this list: <dietary_type_list>).
   - Cooking Method: The method used to prepare the dish (use only from this list: <cooking_method_list>).
   - Special Tags: Any additional tags that describe the dish (use only from this list: <special_tags_list>).
@@ -26,8 +27,6 @@ Prompt: |
   - A list of modified instructions (just the changes).
   - Estimated calories per portion for this version.
   - "notes": A brief explanation of the changes.
-
-  Also, generate an "imagePrompt": A brief, consistent prompt describing the final dish for image generation (No need to give style or background ONLY THE MAIN DISH SUBJECT [THIS IS IMPORTANT]).
 
   If data is missing (e.g. cooking time, calories), make reasonable expert assumptions based on standard cooking practices.
 
@@ -44,8 +43,8 @@ Prompt: |
       "cut": { "ingredients": [ { "item": "string", "amount": "string", "unit": "string", "notes": "string" } ], "instructions": ["string"], "caloriesPerPortion": number, "notes": "string" },
       "bulk": { "ingredients": [ { "item": "string", "amount": "string", "unit": "string", "notes": "string" } ], "instructions": ["string"], "caloriesPerPortion": number, "notes": "string" }
     },
-    "imagePrompt": "string",
     "course_type":"string",
+    "cuisine_type":"string",
     "dietary_type": "string",
     "cooking_method": "string",
     "special_tags": "string"    

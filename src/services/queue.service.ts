@@ -133,8 +133,8 @@ export class QueueService {
                     console.error(`[Job ${job.id}] Translation failed, proceeding with original data:`, err);
                 }
 
-                // 4. Generate Image (if prompt exists)
-                if (consolidatedData.imagePrompt) {
+                // 4. Generate Image (if data exists)
+                if (consolidatedData.name) {
                     try {
                         console.log(`[Job ${job.id}] Generating image...`);
                         // Use job.id for the image filename since we don't have a DB ID yet

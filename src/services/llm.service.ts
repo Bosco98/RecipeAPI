@@ -38,6 +38,7 @@ export class LLMService {
 
     async extractRecipe(content: string, url: string): Promise<Recipe> {
         const course_types = foodtypes['course_type'];
+        const cuisine_types = foodtypes['cuisine_type'];
         const dietary_types = foodtypes['dietary_type'];
         const cooking_methods = foodtypes['cooking_method'];
         const special_tags = foodtypes['special_tags'];
@@ -47,6 +48,7 @@ export class LLMService {
         let prompt = promptData.Prompt;
         prompt = prompt.replace("<url>", url)
             .replace("<course_type_list>", course_types.join(', '))
+            .replace("<cuisine_type_list>", cuisine_types.join(', '))
             .replace("<dietary_type_list>", dietary_types.join(', '))
             .replace("<cooking_method_list>", cooking_methods.join(', '))
             .replace("<special_tags_list>", special_tags.join(', '));

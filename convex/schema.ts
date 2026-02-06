@@ -99,7 +99,7 @@ export default defineSchema({
                 notes: v.optional(v.string()),
             })
         )),
-        imagePrompt: v.string(),
+        cuisine_type: v.optional(v.string()),
         course_type: v.optional(v.string()),
         dietary_type: v.optional(v.string()),
         cooking_method: v.optional(v.string()),

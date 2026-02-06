@@ -68,7 +68,7 @@ export class ImageService {
 
         // import from prompts 
         const enhancedPrompt = imagePrompt.Prompt.replace("<dish_name>", data.name)
-            .replace("<dish_description>", data.imagePrompt)
+            .replace("<dish_description>", data.description || data.name) // Fallback to name if description is missing
             .replace("<background_color>", backgroundColor);
 
 

@@ -26,7 +26,20 @@ const foodtypes = {
         "Party Food",
         "Kids-Friendly",
         "Festive / Holiday"
+    ],
+    "cuisine_type": [
+        "Indian",
+        "Italian",
+        "Chinese",
+        "Mexican",
+        "American / Continental",
+        "Asian",
+        "Mediterranean",
+        "Middle Eastern",
+        "Lebanese",
+        "British",
+        "African",
+        "European"
     ]
 }
-
 export default foodtypes;
